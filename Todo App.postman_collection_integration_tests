@@ -1,0 +1,305 @@
+{
+	"info": {
+		"_postman_id": "d3056539-0c1f-49b3-9b5b-a3738b759b06",
+		"name": "Todo App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10088350"
+	},
+	"item": [
+		{
+			"name": "Post Todo Tests",
+			"item": [
+				{
+					"name": "Post todo SuccessFully",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    json = JSON.parse(pm.response.text());\r",
+									"    pm.expect(json).to.have.property(\"id\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"myFirstTodo\",\r\n  \"description\": \"shopping\",\r\n  \"status\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7047/ToDo/CreateNewTodo",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7047",
+							"path": [
+								"ToDo",
+								"CreateNewTodo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post todo Without Description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"string\",\r\n  \"status\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7047/ToDo/CreateNewTodo",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7047",
+							"path": [
+								"ToDo",
+								"CreateNewTodo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Todo By Page",
+			"item": [
+				{
+					"name": "Get Todo By Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"json = JSON.parse(pm.response.text());\r",
+									"//obj = JSON.parse(json);   \r",
+									"pm.environment.set(\"ContinuationToken\", escape(json.continuationToken));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7047/ToDo/GetTodosByPage?pageSize=2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7047",
+							"path": [
+								"ToDo",
+								"GetTodosByPage"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo By Page with ContinuationToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"json = JSON.parse(pm.response.text());\r",
+									"//obj = JSON.parse(json);   \r",
+									"pm.environment.set(\"ContinuationToken\", escape(json.continuationToken));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7047/ToDo/GetTodosByPage?pageSize=2&continuationToken={{ContinuationToken}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7047",
+							"path": [
+								"ToDo",
+								"GetTodosByPage"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "2"
+								},
+								{
+									"key": "continuationToken",
+									"value": "{{ContinuationToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo By Page Page size is 26",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7047/ToDo/GetTodosByPage?pageSize=26",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7047",
+							"path": [
+								"ToDo",
+								"GetTodosByPage"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "26"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo By Page Page size is 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7047/ToDo/GetTodosByPage?pageSize=0",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7047",
+							"path": [
+								"ToDo",
+								"GetTodosByPage"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
